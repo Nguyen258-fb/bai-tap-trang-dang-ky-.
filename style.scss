@@ -1,0 +1,100 @@
+// 1. Khai báo biến (Variables)
+$font-main: "Lucida Sans", sans-serif;
+$primary-color: #9933cc;
+$secondary-color: #0099cc;
+$hover-color: #0099cc;
+$text-light: #ffffff;
+$grid-columns: 12;
+
+// 2. Tạo Mixin dùng chung cho hiệu ứng đổ bóng
+@mixin box-shadow-default {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+// 3. Thiết lập cơ bản
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: $font-main;
+}
+
+// 4. Sử dụng Nesting (Lồng quy tắc) cho .row
+.row {
+    &::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+}
+
+// Thiết lập chung cho tất cả các cột
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    width: 100%; // Mặc định cho Mobile First
+}
+
+// 5. Định dạng các thành phần giao diện với Nesting và Biến
+.header {
+    background-color: $primary-color;
+    color: $text-light;
+    padding: 15px;
+}
+
+.menu {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        padding: 8px;
+        margin-bottom: 7px;
+        background-color: $secondary-color;
+        color: $text-light;
+        @include box-shadow-default;
+
+        &:hover {
+            background-color: darken($secondary-color, 10%);
+        }
+    }
+}
+
+.aside {
+    background-color: $secondary-color;
+    padding: 15px;
+    color: $text-light;
+    text-align: center;
+    font-size: 14px;
+    @include box-shadow-default;
+}
+
+.footer {
+    background-color: $secondary-color;
+    color: $text-light;
+    text-align: center;
+    font-size: 12px;
+    padding: 15px;
+}
+
+// 6. Sử dụng vòng lặp @for trong SASS để tự động sinh hệ thống Grid 12 cột
+// Dành cho Máy tính bảng (Tablet >= 600px)
+@media only screen and (min-width: 600px) {
+    @for $i from 1 through $grid-columns {
+        .col-s-#{$i} {
+            width: (100% / $grid-columns) * $i;
+        }
+    }
+}
+
+// Dành cho Máy tính để bàn (Desktop >= 768px)
+@media only screen and (min-width: 768px) {
+    @for $i from 1 through $grid-columns {
+        .col-#{$i} {
+            width: (100% / $grid-columns) * $i;
+        }
+    }
+}
